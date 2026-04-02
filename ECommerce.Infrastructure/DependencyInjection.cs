@@ -1,4 +1,5 @@
-﻿using ECommerce.Infrastructure.Persistence;
+﻿using ECommerce.Application.Services.Authentication;
+using ECommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,8 @@ public static class DependencyInjection
 
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(connectionString));
+        
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
 
         return services;
     }
