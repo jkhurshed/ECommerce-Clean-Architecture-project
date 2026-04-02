@@ -1,0 +1,39 @@
+﻿## --- Visual Studio & Build Outputs ---
+bin/
+obj/
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+
+ECommerce.API/appsettings.json
+
+## --- JetBrains Rider ---
+.idea/
+*.sln.iml
+
+## --- VS Code ---
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+## --- Core .NET Temp Files ---
+*.swp
+*~
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## --- Database & Secrets ---
+*.db
+*.db-shm
+*.db-wal
+appsettings.Development.json
+# (Optional: Un-comment if you use UserSecrets)
+# secrets.json
+
+## --- OS Specific ---
+.DS_Store
+Thumbs.db
