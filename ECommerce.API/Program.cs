@@ -1,5 +1,4 @@
 using ECommerce.Application;
-using ECommerce.Application.Services.Authentication;
 using ECommerce.Infrastructure;
 using ECommerce.Infrastructure.Persistence;
 
@@ -23,7 +22,6 @@ var app = builder.Build();
         await AppDbContextSeeder.SeedAsync(dbContext);
     }
 
-    // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
