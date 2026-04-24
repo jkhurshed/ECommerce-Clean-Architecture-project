@@ -1,4 +1,5 @@
 using ECommerce.Domain.Entities.Customer;
+using ECommerce.Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,11 +9,13 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
 {
     public void Configure(EntityTypeBuilder<Customer> builder)
     {
+        builder.ToTable("Customers");
+        builder.HasBaseType((Type?)null);
         builder.ConfigureBaseEntity();
-        builder.Property(x => x.Email).IsRequired().HasMaxLength(256);
+        builder.HasOne<User>(x => x.User)
+               .WithOne()
+               .HasForeignKey<Customer>(x => x.UserId)
+               .OnDelete(DeleteBehavior.Cascade);
         builder.Property(x => x.Phone).HasMaxLength(30);
-        builder.Property(x => x.FirstName).IsRequired().HasMaxLength(100);
-        builder.Property(x => x.LastName).IsRequired().HasMaxLength(100);
-        builder.HasIndex(x => x.Email).IsUnique();
     }
 }

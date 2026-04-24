@@ -1,28 +1,68 @@
 ﻿using ECommerce.Application.Common.Interfaces.Authentication;
+using ECommerce.Application.Common.Interfaces.Persistence;
+using ECommerce.Domain.Entities.Identity;
 
 namespace ECommerce.Application.Services.Authentication;
 
-public class AuthenticationService(IJwtTokenGenerator jwtTokenGenerator) : IAuthenticationService
+public class AuthenticationService(
+    IJwtTokenGenerator jwtTokenGenerator, 
+    IUserRepository userRepository,
+    IPasswordHasher passwordHasher
+    ) : IAuthenticationService
 {
-    public AuthenticationResult Register(string firstName, string lastName, string email, string password)
+    public async Task<AuthenticationResult> RegisterAsync(string firstName, string lastName, string email, string password)
     {
+        // If the user already exists, throw an exception
+        var checkUser = await userRepository.GetUserByEmailAsync(email);
+        if (checkUser is not null)
+        {
+            throw new InvalidOperationException("User already exists");
+        }
+        
+        // Create user
+        var user = new User{
+            FirstName = firstName, 
+            LastName = lastName, 
+            Email = email, 
+            Password = password
+        };
+        
+        // add and save user to database
+        await userRepository.AddAsync(user);
         
         // Create jwt token
-        Guid userId = Guid.NewGuid();
-        
-        var token = jwtTokenGenerator.GenerateToken(userId, firstName, lastName);
-        
+        var token = jwtTokenGenerator.GenerateToken(user.Id, firstName, lastName);
+
         return new AuthenticationResult(
-            userId, 
-            firstName, 
-            lastName, 
-            email, 
+            user.Id,
+            firstName,
+            lastName,
+            email,
             token
-            );
+        );
     }
     
-    public AuthenticationResult Login(string email, string password)
+    public async Task<AuthenticationResult> LoginAsync(string email, string password)
     {
-        return new AuthenticationResult(Guid.NewGuid(), "firstName", "lastName", email, "token");
+        var user = await userRepository.GetUserByEmailAsync(email);
+        //
+        // if (user is not null)
+        // {
+        //     throw new InvalidOperationException("User already exist");
+        // }
+
+        var isPasswordValid = passwordHasher.VerifyHashedPassword(passwordHasher.HashPassword(password), user!.Password);
+        if (!isPasswordValid)
+            throw new UnauthorizedAccessException("Invalid email or password.");
+        
+        var token = jwtTokenGenerator.GenerateToken(user.Id, user.FirstName, user.LastName);
+        
+        return new AuthenticationResult(
+            user.Id, 
+            user.FirstName,  
+            user.LastName, 
+            email,
+            token
+        );
     }
 }

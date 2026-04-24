@@ -1,6 +1,7 @@
 using ECommerce.Domain.Entities.Cart;
 using ECommerce.Domain.Entities.Catalog;
 using ECommerce.Domain.Entities.Customer;
+using ECommerce.Domain.Entities.Identity;
 using ECommerce.Domain.Entities.Inventory;
 using ECommerce.Domain.Entities.Order;
 using ECommerce.Domain.Entities.Payment;
@@ -32,6 +33,7 @@ public static class AppDbContextSeeder
         var attributeIds = CreateIds(recordCount, 500);
         var attributeValueIds = CreateIds(recordCount, 600);
         var mediaIds = CreateIds(recordCount, 700);
+        var userIds = CreateIds(recordCount, 50);
         var customerIds = CreateIds(recordCount, 800);
         var addressIds = CreateIds(recordCount, 900);
         var preferenceIds = CreateIds(recordCount, 1000);
@@ -141,14 +143,25 @@ public static class AppDbContextSeeder
             })
             .ToList();
 
+        var users = Enumerable.Range(1, recordCount)
+            .Select(i => new User
+            {
+                Id = userIds[i - 1],
+                FirstName = $"First{i:00}",
+                LastName = $"Last{i:00}",
+                Email = $"user{i:00}@example.com",
+                Password = $"hashed_password_{i:00}",
+                CreatedAt = now.AddDays(-i),
+                UpdatedAt = now.AddDays(-i)
+            })
+            .ToList();
+
         var customers = Enumerable.Range(1, recordCount)
             .Select(i => new Customer
             {
                 Id = customerIds[i - 1],
-                Email = $"customer{i:00}@example.com",
+                UserId = userIds[i - 1],
                 Phone = $"+1000000{i:000}",
-                FirstName = $"Customer{i:00}",
-                LastName = $"User{i:00}",
                 CreatedAt = now.AddDays(-i),
                 UpdatedAt = now.AddDays(-(i - 1))
             })
@@ -388,6 +401,7 @@ public static class AppDbContextSeeder
         await context.Brands.AddRangeAsync(brands, cancellationToken);
         await context.Categories.AddRangeAsync(categories, cancellationToken);
         await context.Attributes.AddRangeAsync(attributes, cancellationToken);
+        await context.Users.AddRangeAsync(users, cancellationToken);
         await context.Customers.AddRangeAsync(customers, cancellationToken);
         await context.Warehouses.AddRangeAsync(warehouses, cancellationToken);
         await context.Coupons.AddRangeAsync(coupons, cancellationToken);

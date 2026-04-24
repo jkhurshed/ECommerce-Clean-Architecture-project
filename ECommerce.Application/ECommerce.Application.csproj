@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.14" />
     </ItemGroup>
 

@@ -9,40 +9,55 @@ namespace ECommerce.API.Controllers;
 public class AuthenticationController(IAuthenticationService authenticationService) : ControllerBase
 {
     [HttpPost("register")]
-    public IActionResult Register(RegisterRequest request)
+    public async Task<ActionResult<AuthenticationResult>> Register(RegisterRequest request)
     {
-        var result = authenticationService.Register(
-            request.FirstName, 
-            request.LastName, 
-            request.Email, 
-            request.Password);
+        try
+        {
+            var result = await authenticationService.RegisterAsync(
+                request.FirstName,
+                request.LastName,
+                request.Email,
+                request.Password);
+            
+            var response = new AuthenticationResult(
+                result.Id,
+                result.FirstName,
+                result.LastName,
+                result.Email,
+                result.Token
+                );
+
+            return Ok(response);
+        }
+        catch(InvalidOperationException ex)
+        {
+            return BadRequest(new {message = ex.Message});
+        }
         
-        var response = new AuthenticationResponse(
-            result.Id,
-            result.FirstName,
-            result.LastName,
-            result.Email,
-            result.Token
-            );
-        
-        return Ok(response);
     }
     
     [HttpPost("login")]
-    public IActionResult Login(LoginRequest request)
+    public async Task<ActionResult<AuthenticationResult>> Login(LoginRequest request)
     {
-        var result = authenticationService.Login(
-            request.Email, 
-            request.Password);
-        
-        var response = new AuthenticationResponse(
-            result.Id,
-            result.FirstName,
-            result.LastName,
-            result.Email,
-            result.Token
-        );
-        
-        return Ok(response);
+        try
+        {
+            var result = authenticationService.LoginAsync(
+                request.Email, 
+                request.Password);
+            
+            var response = new AuthenticationResult(
+                result.Result.Id,
+                result.Result.FirstName,
+                result.Result.LastName,
+                result.Result.Email,
+                result.Result.Token
+            );
+            
+            return Ok(response);
+        }
+        catch(UnauthorizedAccessException ex)
+        {
+            return BadRequest(new {message = ex.Message});
+        }
     }
 }

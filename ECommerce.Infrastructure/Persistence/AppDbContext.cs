@@ -6,6 +6,7 @@ using ECommerce.Domain.Entities.Order;
 using ECommerce.Domain.Entities.Payment;
 using ECommerce.Domain.Entities.Promotion;
 using ECommerce.Domain.Entities.Shipping;
+using ECommerce.Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProductAttribute = ECommerce.Domain.Entities.Catalog.Attribute;
 
@@ -39,6 +40,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Rule> Rules => Set<Rule>();
     public DbSet<Shipment> Shipments => Set<Shipment>();
     public DbSet<CarrierMethod> CarrierMethods => Set<CarrierMethod>();
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

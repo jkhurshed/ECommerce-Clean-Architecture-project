@@ -1,4 +1,5 @@
 using ECommerce.Domain.Common;
+using ECommerce.Domain.Entities.Identity;
 using CartEntity = ECommerce.Domain.Entities.Cart.Cart;
 using OrderEntity = ECommerce.Domain.Entities.Order.Order;
 
@@ -6,13 +7,11 @@ namespace ECommerce.Domain.Entities.Customer;
 
 public class Customer : BaseEntity
 {
-    public string Email { get; set; } = string.Empty;
+    public Guid UserId { get; set; }
+
+    public User User { get; set; } = null!;
 
     public string? Phone { get; set; }
-
-    public string FirstName { get; set; } = string.Empty;
-
-    public string LastName { get; set; } = string.Empty;
 
     public ICollection<Address> Addresses { get; set; } = [];
 
