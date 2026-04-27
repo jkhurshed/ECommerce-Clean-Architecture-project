@@ -19,12 +19,15 @@ public class AuthenticationService(
             throw new InvalidOperationException("User already exists");
         }
         
+        // Hash password
+        var hashedPassword = passwordHasher.HashPassword(password);
+        
         // Create user
         var user = new User{
             FirstName = firstName, 
             LastName = lastName, 
             Email = email, 
-            Password = password
+            Password = hashedPassword
         };
         
         // add and save user to database
@@ -45,13 +48,13 @@ public class AuthenticationService(
     public async Task<AuthenticationResult> LoginAsync(string email, string password)
     {
         var user = await userRepository.GetUserByEmailAsync(email);
-        //
-        // if (user is not null)
-        // {
-        //     throw new InvalidOperationException("User already exist");
-        // }
+        
+        if (user is null)
+        {
+            throw new UnauthorizedAccessException("Invalid email or password.");
+        }
 
-        var isPasswordValid = passwordHasher.VerifyHashedPassword(passwordHasher.HashPassword(password), user!.Password);
+        var isPasswordValid = passwordHasher.VerifyHashedPassword(password, user.Password);
         if (!isPasswordValid)
             throw new UnauthorizedAccessException("Invalid email or password.");
         
