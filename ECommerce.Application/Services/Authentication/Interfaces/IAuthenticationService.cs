@@ -1,4 +1,4 @@
-﻿namespace ECommerce.Application.Services.Authentication;
+﻿namespace ECommerce.Application.Services.Authentication.Interfaces;
 
 public interface IAuthenticationService
 {

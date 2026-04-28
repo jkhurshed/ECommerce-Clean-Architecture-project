@@ -1,5 +1,6 @@
 ﻿using ECommerce.Application.Common.Interfaces.Authentication;
 using ECommerce.Application.Services.Authentication;
+using ECommerce.Application.Services.Authentication.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 namespace ECommerce.Application;
 

@@ -1,5 +1,6 @@
 ﻿using ECommerce.Application.Common.Interfaces.Authentication;
 using ECommerce.Application.Common.Interfaces.Persistence;
+using ECommerce.Application.Services.Authentication.Interfaces;
 using ECommerce.Domain.Entities.Identity;
 
 namespace ECommerce.Application.Services.Authentication;

@@ -1,4 +1,5 @@
 ﻿using ECommerce.Application.Services.Authentication;
+using ECommerce.Application.Services.Authentication.Interfaces;
 using ECommerce.Contracts.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,16 +42,16 @@ public class AuthenticationController(IAuthenticationService authenticationServi
     {
         try
         {
-            var result = authenticationService.LoginAsync(
+            var result = await authenticationService.LoginAsync(
                 request.Email, 
                 request.Password);
             
             var response = new AuthenticationResult(
-                result.Result.Id,
-                result.Result.FirstName,
-                result.Result.LastName,
-                result.Result.Email,
-                result.Result.Token
+                result.Id,
+                result.FirstName,
+                result.LastName,
+                result.Email,
+                result.Token
             );
             
             return Ok(response);
