@@ -45,7 +45,7 @@ public class AuthenticationController(IAuthenticationService authenticationServi
             var result = await authenticationService.LoginAsync(
                 request.Email, 
                 request.Password);
-            
+
             var response = new AuthenticationResult(
                 result.Id,
                 result.FirstName,
@@ -53,7 +53,7 @@ public class AuthenticationController(IAuthenticationService authenticationServi
                 result.Email,
                 result.Token
             );
-            
+
             return Ok(response);
         }
         catch(UnauthorizedAccessException ex)
@@ -61,4 +61,5 @@ public class AuthenticationController(IAuthenticationService authenticationServi
             return BadRequest(new {message = ex.Message});
         }
     }
+
 }
