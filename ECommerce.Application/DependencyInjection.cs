@@ -1,4 +1,6 @@
 ﻿using ECommerce.Application.Common.Interfaces.Authentication;
+using ECommerce.Application.Common.Interfaces.Services;
+using ECommerce.Application.Services.Catalog;
 using ECommerce.Application.Services.Authentication;
 using ECommerce.Application.Services.Authentication.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +12,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IPasswordHasher, PasswordHasherService>();
+        services.AddScoped<IAttributeService, AttributeService>();
         
         return services;
     }
