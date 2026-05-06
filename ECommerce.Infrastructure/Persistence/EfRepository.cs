@@ -1,5 +1,4 @@
 ﻿using ECommerce.Application.Common.Interfaces.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Infrastructure.Persistence;
 
